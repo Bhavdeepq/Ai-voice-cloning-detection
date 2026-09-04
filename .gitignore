@@ -1,28 +1,12 @@
-# Python virtual environments
-.venv/
 venv/
-env/
-
-# Python bytecode and tooling caches
+.venv/
 __pycache__/
-*.py[cod]
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# Environment variables and local configuration
-.env
-.env.*
-
-# Machine-learning artifacts and local datasets
-artifacts/
-checkpoints/
-logs/
+*.pyc
 data/
-datasets/
-
-# Editor and OS files
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+models/*.pth
+.env
+output_test/
+smoke_test/
+finetune_*/
+artifacts/
+*.tfevents.*
