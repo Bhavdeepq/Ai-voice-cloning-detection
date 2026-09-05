@@ -8,6 +8,7 @@ from tempfile import NamedTemporaryFile
 from typing import AsyncIterator
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from .detector import VoiceDetector
 
@@ -20,6 +21,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title="Voice Clone Detection API", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
