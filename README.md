@@ -1,45 +1,46 @@
-# AI Voice Cloning Detection
+# AI-Powered Voice Cloning Detection
 
-An AASIST based detector for classifying a 16 kHz WAV recording as **REAL** or
-**SPOOF**. The repository contains the final FoR-tuned demo checkpoint and the
-source required to run or retrain it.
+SIH 2026 inference backend for **AI-Powered Real-Time Detection and Prevention of Voice Cloning Impersonation Attacks**. It ships exactly one immutable, validated detector checkpoint: `models/AASIST-L-SIH-v3.pth`.
 
-## Run the detector
-
-Create an environment and install the dependencies:
+## Run inference
 
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+python -m src.detector demo\demo_real.wav
 ```
 
-Then classify a WAV file:
+```python
+from src import VoiceDetector
 
-```powershell
-python -m src.detect path\to\audio.wav
+detector = VoiceDetector()
+result = detector.predict("audio.wav")
 ```
 
-The detector accepts 16 kHz WAV files. Stereo files are converted to mono and
-audio shorter than four seconds is repeated before inference.
+The result contains `prediction` (`REAL` or `AI_SPOOF`), `confidence`, `real_probability`, `fake_probability`, and `segments_analyzed`. Audio is mixed to mono, resampled to 16 kHz, repeat-padded when short, and analyzed in AASIST's 4.04-second windows. CUDA is selected when available; otherwise inference uses CPU. No datasets, downloads, or training code are required.
 
-## Project layout
+## Validated V3 baseline
 
-- `src/detect.py` — command-line inference entry point.
-- `models/AASIST.py` — AASIST-L architecture.
-- `models/AASIST.pth` — official full AASIST checkpoint.
-- `models/AASIST-L-FoR-finetuned.pth` — final demo checkpoint.
-- `models/AASIST-L.pth` — base checkpoint used for fine-tuning.
-- `configs/` and `scripts/` — fine-tuning configuration and training utilities.
+| Metric | Result |
+| --- | ---: |
+| Validation Accuracy | 96.9% |
+| In-the-Wild fixed benchmark | 92.93% |
+| In-the-Wild Real Accuracy | 95.96% |
+| In-the-Wild Fake Accuracy | 89.90% |
+| FoR external test | 91.54% |
+| FoR Real Accuracy | 84.01% |
+| FoR Fake Accuracy | 99.08% |
 
-Training datasets, virtual environments, experiment outputs, logs, and temporary
-model checkpoints are deliberately excluded from version control.
+## Layout
 
-## Evaluate full AASIST
-
-With ASVspoof 2019 LA available at the path in `configs/AASIST.conf`, run a
-reproducible balanced development-set evaluation:
-
-```powershell
-python scripts/evaluate_aasist.py --samples-per-class 100
+```text
+models/AASIST.py                 # AASIST-L architecture required by V3
+models/AASIST-L-SIH-v3.pth       # the only checkpoint
+configs/finetune.conf            # immutable V3 architecture configuration
+src/preprocessing.py             # mono conversion, 16 kHz resampling, windows
+src/detector.py                  # VoiceDetector API and CLI
+demo/                            # optional local smoke-test WAVs (git-ignored)
 ```
+
+Install the appropriate PyTorch CPU/CUDA build for the deployment platform. The checkpoint is never modified or downloaded at runtime.

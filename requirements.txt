@@ -1,11 +1,4 @@
-# Core inference
 numpy
 soundfile
+scipy
 torch
-
-# Fine-tuning utilities
-librosa
-pandas
-scikit-learn
-tensorboard
-torchcontrib
