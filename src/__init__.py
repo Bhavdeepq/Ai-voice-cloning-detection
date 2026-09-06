@@ -1,4 +1,4 @@
-"""Inference API for the SIH V3 voice-cloning detector."""
+"""Inference API for the SIH V4 voice-cloning detector."""
 
 __all__ = ["VoiceDetector"]
 

@@ -3,6 +3,4 @@ venv/
 f5tts_env/
 __pycache__/
 *.pyc
-dataset/
-demo/*.wav
 .env
