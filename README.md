@@ -1,4 +1,4 @@
-# AI-Powered Voice Cloning Detection
+# VoiceShield: AI-Powered Voice Cloning Detection
 
 An SIH demonstration project for detecting AI-generated or voice-cloned speech. The production detector uses one model only: **AASIST-L-SIH-v4**.
 
@@ -9,7 +9,13 @@ The application accepts an uploaded audio file or short microphone recordings fr
 
 This is a research prototype. A prediction is not proof of identity or fraud, and it is not direct telephone-call interception.
 
-## Production architecture
+## Demo
+
+<p align="center">
+<img width="1131" height="1017" alt="image" src="https://github.com/user-attachments/assets/dcfc9a25-225d-498d-8b8c-e6e01e2000e2" />
+</p>
+
+## Production Architecture
 
 ```text
 Audio upload or browser microphone
@@ -26,9 +32,6 @@ VoiceDetector + AASIST-L-SIH-v4.pth
             |
             v
 REAL / AI_SPOOF result
-```
-
-The browser records roughly four-second microphone chunks, converts them to WAV, and sends each chunk through the same HTTP endpoint used for uploaded files. There are no WebSockets, speaker-verification, database, or authentication components.
 
 ## Repository layout
 
